@@ -1,1 +1,1 @@
-web: panel serve --port=$PORT app.py --allow-websocket-origin=ikon-dash.herokuapp.com
+web: panel serve --port=$PORT app.ipynb --allow-websocket-origin=ikon-dash.herokuapp.com
