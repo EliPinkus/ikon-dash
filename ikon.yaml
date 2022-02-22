@@ -1,0 +1,26 @@
+config:
+  title: "Precipitation Dashboard"
+sources:
+  # weather:
+  #   cache_dir: ./cache
+  #   type: ski
+  ski_csv:
+    type: file
+    tables:
+      ikon_resorts: data_ingestion/snowfall.csv
+targets:
+# - title: test
+#   source: weather
+#   views:
+#     test_table:
+#       table: ikon
+#       type: table
+- title: other_test
+  source: ski_csv
+  views:
+    test:
+      table: ikon_resorts
+      type: table
+  filters:
+  - type: widget
+    field: state
