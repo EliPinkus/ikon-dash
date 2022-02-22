@@ -1,26 +1,114 @@
-config:
-  title: "Precipitation Dashboard"
-sources:
-  # weather:
-  #   cache_dir: ./cache
-  #   type: ski
-  ski_csv:
-    type: file
-    tables:
-      ikon_resorts: data_ingestion/snowfall.csv
-targets:
-# - title: test
-#   source: weather
+# config:
+#   title: "Precipitation Dashboard"
+# sources:
+#   # weather:
+#   #   cache_dir: ./cache
+#   #   type: ski
+#   ski_csv:
+#     type: file
+#     tables:
+#       ikon_resorts: data_ingestion/snowfall.csv
+# targets:
+# # - title: test
+# #   source: weather
+# #   views:
+# #     test_table:
+# #       table: ikon
+# #       type: table
+# - title: other_test
+#   source: ski_csv
 #   views:
-#     test_table:
-#       table: ikon
+#     test:
+#       table: ikon_resorts
 #       type: table
-- title: other_test
-  source: ski_csv
-  views:
-    test:
-      table: ikon_resorts
-      type: table
-  filters:
-  - type: widget
-    field: state
+#   filters:
+#   - type: widget
+#     field: state
+
+
+
+config:
+  title: Palmer Penguins
+  theme: dark
+  layout: tabs
+sources:
+  penguins:
+    type: file
+    cache_dir: ./cache
+    tables:
+      penguins: https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-07-28/penguins.csv
+    filters:
+      species:
+        type: widget
+        field: species
+      island:
+        type: widget
+        field: island
+      sex:
+        type: widget
+        field: sex
+      expr:
+        type: param
+        parameter: scatter.selection_expr
+targets:
+  - title: Plots
+    source: penguins
+    filters:
+      - species
+      - island
+      - sex
+      - expr
+    views:
+      scatter:
+        type: hvplot
+        table: penguins
+        kind: scatter
+        x: bill_length_mm
+        y: bill_depth_mm
+        color: species
+        responsive: true
+        height: 350
+        selection_group: penguin
+      depth_hist:
+        type: hvplot
+        table: penguins
+        kind: hist
+        y: bill_length_mm
+        responsive: true
+        height: 350
+        selection_group: penguin
+      length_hist:
+        type: hvplot
+        table: penguins
+        kind: hist
+        y: bill_depth_mm
+        responsive: true
+        height: 350
+        selection_group: penguin
+      mass_hist:
+        type: hvplot
+        table: penguins
+        kind: hist
+        y: body_mass_g
+        responsive: true
+        height: 350
+        selection_group: penguin
+    layout: [[scatter], [depth_hist, length_hist, mass_hist]]
+    sizing_mode: stretch_width
+    height: 800
+  - title: Table
+    source: penguins
+    filters:
+      - species
+      - island
+      - sex
+      - expr
+    views:
+      table:
+        type: table
+        table: penguins
+        layout: fit_data_fill
+        show_index: false
+        theme: midnight
+        sizing_mode: stretch_both
+    sizing_mode: stretch_width
